@@ -739,6 +739,7 @@ static long  mtpg_ioctl(struct file *fd, unsigned int code, unsigned long arg)
 			break;
 		case SET_ZLP_DATA:
 			//req->zero = 1;
+			req = req_get(dev, &dev->tx_idle);
 			req->length = 0;
 			printk("[%s] SEND_ZLP_DATA and usb_ep_queu 0 data size = %d\tline = [%d] \n", __func__,size,__LINE__);
 			status = usb_ep_queue(dev->bulk_in, req, GFP_ATOMIC);

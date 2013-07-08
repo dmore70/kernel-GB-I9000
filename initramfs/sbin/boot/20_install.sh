@@ -1,3 +1,14 @@
+clean_all_previous()
+{
+	/sbin/busybox rm /system/app/Semaphore.apk
+	/sbin/busybox rm /data/dalvik-cache/*semaphore.apk*
+	/sbin/busybox rm -r /data/cfroot
+	/sbin/busybox rm -r /data/fproot
+	/sbin/busybox rm -r /system/cfroot
+	/sbin/busybox rm -r /system/fproot/sema*
+}
+
+
 echo "remounting /system readwrite..."
 /sbin/busybox mount -o remount,rw /system
 
@@ -19,21 +30,15 @@ else
     /sbin/busybox chmod 777 /system/etc/init.d
 fi
 
-echo "removing MidnightControl..."
-/sbin/busybox rm -f /system/app/MidnightControl.apk
-
-echo "installing Nightmode.apk..."
-/sbin/busybox rm -f /system/app/Nightmode.apk
-/sbin/busybox rm -f /data/app/com.mialwe.nightmode-1.apk
-/sbin/busybox cat /res/misc/Nightmode.apk > /system/app/Nightmode.apk
-/sbin/busybox chown 0.0 /system/app/Nightmode.apk
-/sbin/busybox chmod 644 /system/app/Nightmode.apk
-
 # clean multiple su binaries
 echo "cleaning su installations except /system/xbin/su if any..."
-/sbin/busybox rm -f /system/bin/su
-/sbin/busybox rm -f /vendor/bin/su
-/sbin/busybox rm -f /system/sbin/su
+/sbin/busybox rm /system/bin/su
+/sbin/busybox rm /vendor/bin/su
+/sbin/busybox rm /system/sbin/su
+# /sbin/busybox rm /system/xbin/su
+
+# clean  semaphore or cfroot files
+clean_all_previous
 
 # install xbin/su if not there
 if /sbin/busybox [ -f /system/xbin/su ];then
@@ -52,8 +57,15 @@ if /sbin/busybox [ -f /system/app/Superuser.apk ];then
     echo "/system/app/Superuser.apk found, skipping..."
 else
     echo "cleaning up Superuser.apk installations..."
-    /sbin/busybox rm -f /system/app/Superuser.apk
-    /sbin/busybox rm -f /data/app/Superuser.apk
+    /sbin/busybox rm /system/app/Superuser.apk
+    /sbin/busybox rm /data/app/Superuser.apk
+    /sbin/busybox rm /system/app/com.noshufou.android.su*.apk
+    /sbin/busybox rm /data/app/com.noshufou.android.su*.apk
+    /sbin/busybox rm -r /data/data/com.noshufou.android.su*
+    /sbin/busybox rm /system/app/SuperSU.apk
+    /sbin/busybox rm -r /data/data/eu.chainfire.supersu
+    /sbin/busybox rm -r /data/dalvik-cache/system@app@SuperSU.apk@classes.dex
+
     echo "installing /system/app/Superuser.apk"
     echo "if this fails free some space on /system."
     /sbin/busybox cat /res/misc/Superuser.apk > /system/app/Superuser.apk

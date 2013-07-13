@@ -567,6 +567,41 @@ void elv_requeue_request(struct request_queue *q, struct request *rq)
 	elv_insert(q, rq, ELEVATOR_INSERT_REQUEUE);
 }
 
+/**
+ * elv_reinsert_request() - Insert a request back to the scheduler
+ * @q:		request queue where request should be inserted
+ * @rq:		request to be inserted
+ *
+ * This function returns the request back to the scheduler to be
+ * inserted as if it was never dispatched
+ *
+ * Return: 0 on success, error code on failure
+ */
+int elv_reinsert_request(struct request_queue *q, struct request *rq)
+{
+	int res;
+
+	if (!q->elevator->elevator_type->ops.elevator_reinsert_req_fn)
+		return -EPERM;
+
+	res = q->elevator->elevator_type->ops.elevator_reinsert_req_fn(q, rq);
+	if (!res) {
+		/*
+		 * it already went through dequeue, we need to decrement the
+		 * in_flight count again
+		 */
+		if (blk_account_rq(rq)) {
+			q->in_flight[rq_is_sync(rq)]--;
+			if (rq->cmd_flags & REQ_SORTED)
+				elv_deactivate_rq(q, rq);
+		}
+		rq->cmd_flags &= ~REQ_STARTED;
+		q->nr_sorted++;
+	}
+
+	return res;
+}
+
 void elv_drain_elevator(struct request_queue *q)
 {
 	static int printed;
@@ -794,7 +829,7 @@ int elv_set_request(struct request_queue *q, struct request *rq, gfp_t gfp_mask)
 	if (e->ops->elevator_set_req_fn)
 		return e->ops->elevator_set_req_fn(q, rq, gfp_mask);
 
-	rq->elevator_private = NULL;
+	rq->elevator_private[0] = NULL;
 	return 0;
 }
 

@@ -189,9 +189,18 @@ struct request {
 	 * Three pointers are available for the IO schedulers, if they need
 	 * more they have to dynamically allocate it.
 	 */
-	void *elevator_private;
-	void *elevator_private2;
-	void *elevator_private3;
+	//void *elevator_private;
+	//void *elevator_private2;
+	//void *elevator_private3;
+
+	union {
+		void *elevator_private[3];
+		struct {
+			unsigned int		seq;
+			struct list_head	list;
+		} flush;
+	};
+
 
 	struct gendisk *rq_disk;
 	unsigned long start_time;

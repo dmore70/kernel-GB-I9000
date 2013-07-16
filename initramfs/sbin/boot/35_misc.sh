@@ -53,7 +53,7 @@ $BB mount|grep /cache
 #-------------------------------------------------------------------------------
 # CPU maxfreq
 #-------------------------------------------------------------------------------
-CONFFILE="___midnight_freq.conf"
+CONFFILE="midnight_freq.conf"
 echo; echo "$(date) $CONFFILE"
 if $BB [ -f /data/local/$CONFFILE ];then
     if $BB [ "`$BB grep 1128 /data/local/$CONFFILE`" ]; then
@@ -78,7 +78,7 @@ $BB insmod /lib/modules/cpufreq_stats.ko
 #-------------------------------------------------------------------------------
 # CPU governor
 #-------------------------------------------------------------------------------
-CONFFILE="__midnight_gov.conf"
+CONFFILE="midnight_gov.conf"
 echo; echo "$(date) $CONFFILE"
 if $BB [ -f /data/local/$CONFFILE ];then
     if $BB [[ "`$BB grep conservative /data/local/$CONFFILE`" || "`$BB grep ondemand /data/local/$CONFFILE`" || "`$BB grep smartassV2 /data/local/$CONFFILE`" || "`$BB grep smoove /data/local/$CONFFILE`" ]]; then
@@ -92,7 +92,7 @@ fi
 #-------------------------------------------------------------------------------
 # misc kernel options
 #-------------------------------------------------------------------------------
-CONFFILE="__midnight_options.conf"
+CONFFILE="midnight_options.conf"
 echo; echo "$(date) $CONFFILE"
 if $BB [ -f /data/local/$CONFFILE ];then
 
@@ -149,7 +149,7 @@ $BB lsmod
 #-------------------------------------------------------------------------------
 # undervolting profiles
 #-------------------------------------------------------------------------------
-CONFFILE="__midnight_uv.conf"
+CONFFILE="midnight_uv.conf"
 echo; echo "$(date) $CONFFILE"
 if $BB [ -f /data/local/$CONFFILE ];then
     # set uv values
@@ -180,7 +180,7 @@ echo
 #-------------------------------------------------------------------------------
 # gamma
 #-------------------------------------------------------------------------------
-CONFFILE="__midnight_gamma.conf"
+CONFFILE="midnight_gamma.conf"
 echo; echo "$(date) $CONFFILE"
 if $BB [ -f /data/local/$CONFFILE ];then
     if $BB [ "`$BB grep GAM1 /data/local/$CONFFILE`" ]; then
@@ -203,7 +203,7 @@ fi
 #<string name="r">1887492806</string>
 #<string name="g">2169824215</string>
 #<string name="b">3209991042</string>       
-CONFFILE="__midnight_rgb.conf"
+CONFFILE="midnight_rgb.conf"
 echo; echo "$(date) $CONFFILE"
 echo "rgb original:"
 cat /sys/devices/virtual/misc/rgbb_multiplier/red_multiplier
@@ -403,7 +403,7 @@ cat /proc/meminfo|grep ^Cached
 # init.d support, executes all /system/etc/init.d/<S>scriptname files
 #-------------------------------------------------------------------------------
 echo;echo "$(date) init.d/userinit.d"
-CONFFILE="__midnight_options.conf"
+CONFFILE="midnight_options.conf"
 if $BB [ -f /data/local/$CONFFILE ];then
     echo "configfile /data/local/midnight_options.conf found, checking values..."
     if $BB [ "`$BB grep INITD /data/local/$CONFFILE`" ]; then

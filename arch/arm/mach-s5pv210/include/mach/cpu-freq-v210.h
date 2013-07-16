@@ -19,23 +19,22 @@
  **/
 #define APLL_VAL_1664	((1<<31)|(417<<16)|(3<<8)|(0))
 #define APLL_VAL_1332	((1<<31)|(444<<16)|(4<<8)|(0))
-#define APLL_VAL_1300   ((1<<31)|(325<<16)|(6<<8)|(1))
 #define APLL_VAL_1200	((1<<31)|(150<<16)|(3<<8)|(1))
-#define APLL_VAL_1120	((1<<31)|(140<<16)|(3<<8)|(1))
+#define APLL_VAL_1128   ((1<<31)|(141<<16)|(3<<8)|(1))
 #define APLL_VAL_1000	((1<<31)|(125<<16)|(3<<8)|(1))
 #define APLL_VAL_800	((1<<31)|(100<<16)|(3<<8)|(1))
 
 enum perf_level {
 	L0 = 0,	// 1GHz
-	L1,     // 800 MHz
-	L2,     // 400 MHz
-	L3,     // 200 MHz
-	L4,     // 100 MHz
+	L1,	// 800MHz
+	L2,	// 400MHz
+	L3,	// 200MHz
+	L4,	// 100MHz
 	MAX_PERF_LEVEL = L4,
 };
 
 #define SLEEP_FREQ      (800 * 1000) /* Use 800MHz when entering sleep */
-#define ULP_FREQ	(400 * 1000)
+#define ULP_FREQ	(800 * 1000)
 
 /* additional symantics for "relation" in cpufreq with pm */
 #define DISABLE_FURTHER_CPUFREQ         0x10
@@ -60,8 +59,8 @@ enum {
 extern void s5pv210_lock_dvfs_high_level(uint nToken, uint perf_level);
 extern void s5pv210_unlock_dvfs_high_level(unsigned int nToken);
 #endif
+
 void s5pv210_change_high_1000(void);
-void s5pv210_change_high_1100(void);
-void s5pv210_change_high_1200(void);
-void s5pv210_change_high_1300(void);
+void s5pv210_change_high_1128(void);
+
 #endif /* __ASM_ARCH_CPU_FREQ_H */

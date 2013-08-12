@@ -234,33 +234,6 @@ cat /sys/devices/virtual/misc/rgbb_multiplier/red_multiplier
 cat /sys/devices/virtual/misc/rgbb_multiplier/green_multiplier
 cat /sys/devices/virtual/misc/rgbb_multiplier/blue_multiplier        
 
-# activate later if needed...
-# cat_msg_sysfile "/sys/class/misc/touchwake/enabled: " /sys/class/misc/touchwake/enabled
-
-#-------------------------------------------------------------------------------
-# vm tweaks
-#-------------------------------------------------------------------------------
-echo; echo "$(date) vm"
-echo "0" > /proc/sys/vm/swappiness                   # Not really needed as no /swap used...
-echo "2000" > /proc/sys/vm/dirty_writeback_centisecs # Flush after 20sec. (o:500)
-echo "2000" > /proc/sys/vm/dirty_expire_centisecs    # Pages expire after 20sec. (o:200)
-echo "55" > /proc/sys/vm/dirty_background_ratio      # flush pages later (default 5% active mem)
-echo "80" > /proc/sys/vm/dirty_ratio                 # process writes pages later (default 20%)
-echo "3" > /proc/sys/vm/page-cluster
-echo "0" > /proc/sys/vm/laptop_mode
-echo "0" > /proc/sys/vm/oom_kill_allocating_task
-echo "0" > /proc/sys/vm/panic_on_oom
-echo "0" > /proc/sys/vm/overcommit_memory
-cat_msg_sysfile "swappiness: " /proc/sys/vm/swappiness                   
-cat_msg_sysfile "dirty_writeback_centisecs: " /proc/sys/vm/dirty_writeback_centisecs
-cat_msg_sysfile "dirty_expire_centisecs: " /proc/sys/vm/dirty_expire_centisecs    
-cat_msg_sysfile "dirty_background_ratio: " /proc/sys/vm/dirty_background_ratio
-cat_msg_sysfile "dirty_ratio: " /proc/sys/vm/dirty_ratio 
-cat_msg_sysfile "page-cluster: " /proc/sys/vm/page-cluster
-cat_msg_sysfile "laptop_mode: " /proc/sys/vm/laptop_mode
-cat_msg_sysfile "oom_kill_allocating_task: " /proc/sys/vm/oom_kill_allocating_task
-cat_msg_sysfile "panic_on_oom: " /proc/sys/vm/panic_on_oom
-cat_msg_sysfile "overcommit_memory: " /proc/sys/vm/overcommit_memory
 
 #-------------------------------------------------------------------------------
 # security
@@ -293,101 +266,8 @@ echo 30 > /proc/sys/net/ipv4/tcp_keepalive_intvl
 echo 30 > /proc/sys/net/ipv4/tcp_fin_timeout
 echo 0 > /proc/sys/net/ipv4/tcp_timestamps
 
-#-------------------------------------------------------------------------------
-# setprop tweaks
-#-------------------------------------------------------------------------------
-echo; echo "$(date) prop"
-setprop wifi.supplicant_scan_interval 180
-setprop windowsmgr.max_events_per_sec 76;
-setprop ro.ril.disable.power.collapse 1;
-setprop ro.telephony.call_ring.delay 1000;
-setprop mot.proximity.delay 150;
-setprop ro.mot.eri.losalert.delay 1000;
 
-# disabled 2012/02/04, testing...
-#setprop debug.sf.hw 1
-#setprop debug.performance.tuning 1
-#setprop video.accelerate.hw 1
-#echo -n "PROP: debug.sf.hw: ";getprop debug.sf.hw
-#echo -n "PROP: debug.performance.tuning: ";getprop debug.performance.tuning
-#echo -n "PROP: video.accelerate.hw: ";getprop video.accelerate.hw
 
-echo -n "PROP: wifi.supplicant_scan_interval: ";getprop wifi.supplicant_scan_interval
-echo -n "PROP: windowsmgr.max_events_per_sec: ";getprop windowsmgr.max_events_per_sec
-echo -n "PROP: ro.ril.disable.power.collapse: ";getprop ro.ril.disable.power.collapse
-echo -n "PROP: ro.telephony.call_ring.delay: ";getprop ro.telephony.call_ring.delay
-echo -n "PROP: mot.proximity.delay: ";getprop mot.proximity.delay
-echo -n "PROP: ro.mot.eri.losalert.delay: ";getprop ro.mot.eri.losalert.delay
-
-#-------------------------------------------------------------------------------
-# kernel tweaks
-#-------------------------------------------------------------------------------
-echo; echo "$(date) kernel"
-echo "NO_GENTLE_FAIR_SLEEPERS" > /sys/kernel/debug/sched_features
-echo 500 512000 64 2048 > /proc/sys/kernel/sem 
-echo 3000000 > /proc/sys/kernel/sched_latency_ns
-echo 500000 > /proc/sys/kernel/sched_wakeup_granularity_ns
-echo 500000 > /proc/sys/kernel/sched_min_granularity_ns
-echo 0 > /proc/sys/kernel/panic_on_oops
-echo 0 > /proc/sys/kernel/panic
-cat_msg_sysfile "sched_features: " /sys/kernel/debug/sched_features
-cat_msg_sysfile "sem: " /proc/sys/kernel/sem; 
-cat_msg_sysfile "sched_latency_ns: " /proc/sys/kernel/sched_latency_ns
-cat_msg_sysfile "sched_wakeup_granularity_ns: " /proc/sys/kernel/sched_wakeup_granularity_ns
-cat_msg_sysfile "sched_min_granularity_ns: " /proc/sys/kernel/sched_min_granularity_ns
-cat_msg_sysfile "panic_on_oops: " /proc/sys/kernel/panic_on_oops
-cat_msg_sysfile "panic: " /proc/sys/kernel/panic
-
-#-------------------------------------------------------------------------------
-# IO/read_ahead
-#-------------------------------------------------------------------------------
-# set sdcard read_ahead
-echo; echo "$(date) read_ahead_kb"
-cat_msg_sysfile "default: " /sys/devices/virtual/bdi/default/read_ahead_kb
-cat_msg_sysfile "179.0: " /sys/devices/virtual/bdi/179:0/read_ahead_kb
-cat_msg_sysfile "179.8: " /sys/devices/virtual/bdi/179:8/read_ahead_kb
-
-# small fs read_ahead
-echo "16" > /sys/devices/virtual/bdi/138:9/read_ahead_kb
-echo "128" > /sys/devices/virtual/bdi/138:10/read_ahead_kb
-echo "16" > /sys/devices/virtual/bdi/138:11/read_ahead_kb 
-
-echo; echo "$(date) io"    
-echo "IO: setting scheduler tweaks..."
-for i in $STL $BML $MMC $TFSR; 
-do                            
-    echo 0 > $i/queue/rotational;               
-    echo 0 > $i/queue/iostats;
-    if $BB [ -e $i/queue/nr_requests ];then
-        echo 8192 > $i/queue/nr_requests
-    fi
-    if $BB [ -e $i/queue/iosched/writes_starved ];then
-        echo 1 > $i/queue/iosched/writes_starved
-    fi    
-    if $BB [ -e $i/queue/iosched/fifo_batch ];then
-        echo 1 > $i/queue/iosched/fifo_batch
-    fi
-done;
-echo -n "IO: check read_ahead 179.0: "; cat /sys/devices/virtual/bdi/179:0/read_ahead_kb
-echo -n "IO: check read_ahead 179.8: "; cat /sys/devices/virtual/bdi/179:8/read_ahead_kb
-echo -n "IO: check /system read_ahead: "; cat /sys/block/stl9/queue/read_ahead_kb
-echo -n "IO: check /dbdata read_ahead: "; cat /sys/block/stl10/queue/read_ahead_kb
-echo -n "IO: check /cache read_ahead: "; cat /sys/block/stl11/queue/read_ahead_kb
-echo -n "IO: Recheck scheduler: "; cat /sys/block/stl10/queue/scheduler
-echo -n "IO: Recheck rotational: "; cat /sys/block/stl10/queue/rotational
-echo -n "IO: Recheck iostats: "; cat /sys/block/stl10/queue/iostats
-if $BB [ -e /sys/block/stl10/queue/rq_affinity ];then
-    echo -n "IO: Recheck rq_affinity (1): "; cat /sys/block/stl10/queue/rq_affinity                          
-fi
-if $BB [ -e /sys/block/stl10/queue/nr_requests ];then
-    echo -n "IO: Recheck nr_requests (8192): ";cat /sys/block/stl10/queue/nr_requests
-fi
-if $BB [ -e /sys/block/stl10/queue/iosched/writes_starved ];then
-    echo -n "IO: Recheck writes_starved (1): "; cat /sys/block/stl10/queue/iosched/writes_starved
-fi    
-if $BB [ -e /sys/block/stl10/queue/iosched/fifo_batch ];then
-    echo -n "IO: Recheck fifo_batch (1): "; cat /sys/block/stl10/queue/iosched/fifo_batch
-fi
 
 #-------------------------------------------------------------------------------
 # mem info

@@ -4,7 +4,7 @@
 
 
 export LOCALVERSION="-1186377" # release JW9
-export KBUILD_BUILD_VERSION="rev01"
+export KBUILD_BUILD_VERSION="rev02"
 
 #export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/arm-2009q3/bin/arm-none-eabi-"
 #export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/android_prebuilt_toolchains/arm-eabi-linaro-4.6.2/bin/arm-eabi-"
@@ -31,7 +31,7 @@ if [ -e ./initramfs/lib/modules ]; then
 fi
 
 #export INSTALL_MOD_PATH=./initramfs
-make modules -j`grep 'processor' /proc/cpuinfo | wc -l`
+make modules -j`grep 'processor' /proc/cpuinfo | wc -l` 
 #make modules_install
 
 #for i in `find initramfs/lib/modules -name "*.ko"`; do
@@ -44,7 +44,7 @@ find . -type f -name '*.ko' |xargs cp -t ./initramfs/lib/modules
 cp ../initramfs-default-modules/* ./initramfs/lib/modules/
 cp drivers/misc/samsung_modemctl/built-in_o_gcc2009 drivers/misc/samsung_modemctl/built-in.o 
 
-make -j`grep 'processor' /proc/cpuinfo | wc -l`
+make -j`grep 'processor' /proc/cpuinfo | wc -l` 
 cp arch/arm/boot/zImage releasetools
 cd releasetools
 rm -f *.zip

@@ -787,7 +787,7 @@ static int __init s5pv210_cpufreq_driver_init(struct cpufreq_policy *policy)
 
 	cpufreq_frequency_table_get_attr(freq_table, policy->cpu);
 
-	policy->cpuinfo.transition_latency = 23000;	/* 1us */
+	policy->cpuinfo.transition_latency = 40000;	/* 1us */
 
 	rate = clk_get_rate(mpu_clk);
 	i = 0;
@@ -834,12 +834,14 @@ static int __init s5pv210_cpufreq_driver_init(struct cpufreq_policy *policy)
 
 	cpufreq_frequency_table_cpuinfo(policy, freq_table);
     return cpufreq_frequency_table_cpuinfo(policy, freq_table);
-    /*
+
+/*    
      //Set initial max speed 1.0 Ghz
      policy->max = 1000000;
      policy->min = 100000;
      return 0;
-    */
+*/    
+
 }
 
 static int s5pv210_cpufreq_notifier_event(struct notifier_block *this,

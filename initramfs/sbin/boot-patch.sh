@@ -7,18 +7,19 @@ exec 2>&1
 
 # say hello :)
 echo
-echo "************************************************"
-echo "MIDNIGHT KERNEL INITSCRIPT LOG"
-echo "************************************************"
+echo "*****************************"
+echo " DMORE KERNEL INITSCRIPT LOG"
+echo "*****************************"
 echo
 echo -n "Kernel: ";uname -r
 echo -n "PATH: ";echo $PATH
 echo -n "ROM: ";cat /system/build.prop|grep ro.build.display.id
 echo
 echo "Starting script processing in /sbin/boot..."
-echo
+echo 
 # start initscript processing
 echo $(date) USER INIT START from /sbin/boot
+echo
 if cd /sbin/boot >/dev/null 2>&1 ; then
     for file in * ; do
         if ! ls "$file" >/dev/null 2>&1 ; then continue ; fi

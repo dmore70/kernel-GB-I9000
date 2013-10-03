@@ -11,6 +11,7 @@ export KBUILD_BUILD_VERSION="rev02"
 #export CROSS_COMPILE="/home/dmore/android-ndk-r8c/toolchains/arm-linux-androideabi-4.6/prebuilt/linux-x86/bin/arm-linux-androideabi-"
 #export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/android_prebuilt_toolchains/arm-linux-androideabi-4.7/bin/arm-linux-androideabi-" NOT WORK
 export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/android-toolchain-eabi-linaro-4.7/bin/arm-eabi-"
+#export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/android-toolchain-eabi-linaro-4.8-daily/bin/arm-eabi-"
 
 if ! [ -e .config ]; then
  make $1

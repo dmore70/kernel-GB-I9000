@@ -21,5 +21,6 @@ then
   /sbin/busybox cp /res/keys-samsung /res/keys
   recovery-samsung
 else
-  recovery
+   echo 1 > /sbin/recovery-is-running
+   recovery
 fi;

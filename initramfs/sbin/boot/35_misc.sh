@@ -25,11 +25,13 @@ echo 1 > /proc/sys/net/ipv4/conf/all/rp_filter
 # partitions
 #-------------------------------------------------------------------------------
 echo "$(date) mount"
+
 for k in $($BB mount | $BB grep relatime | $BB cut -d " " -f3)
 do
     sync
     $BB mount -o remount,noatime,nodiratime $k
 done
+
 echo "trying to remount EXT4 partitions with speed tweaks if any..."
 for k in $($BB mount | $BB grep ext4 | $BB cut -d " " -f3)
 do
@@ -53,13 +55,14 @@ $BB mount|grep /cache
 #-------------------------------------------------------------------------------
 # CPU maxfreq
 #-------------------------------------------------------------------------------
-CONFFILE="midnight_freq.conf"
+CONFFILE="dmore-cpufreq.conf"
 echo; echo "$(date) $CONFFILE"
 if $BB [ -f /data/local/$CONFFILE ];then
     if $BB [ "`$BB grep 1128 /data/local/$CONFFILE`" ]; then
         echo "oc1128 found, setting..."
         echo 1 > /sys/devices/virtual/misc/midnight_cpufreq/oc1128
         echo 1128000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+
     elif $BB [ "`$BB grep 800 /data/local/$CONFFILE`" ]; then
         echo "max800 found, setting..."
         echo 800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
@@ -76,12 +79,21 @@ sleep 1
 $BB insmod /lib/modules/cpufreq_stats.ko
 
 
-# Default Read Ahead value for sdcards
+# Default Read Ahead value for SD cards (mmcblk)
     echo 512 > /sys/block/mmcblk0/queue/read_ahead_kb 
     echo 512 > /sys/block/mmcblk1/queue/read_ahead_kb 
 
 echo;echo "modules:"
 $BB lsmod
+
+# Turn off debugging for certain modules
+  echo 0 > /sys/module/wakelock/parameters/debug_mask
+  echo 0 > /sys/module/userwakelock/parameters/debug_mask
+  echo 0 > /sys/module/earlysuspend/parameters/debug_mask
+  echo 0 > /sys/module/alarm/parameters/debug_mask
+  echo 0 > /sys/module/alarm_dev/parameters/debug_mask
+  echo 0 > /sys/module/binder/parameters/debug_mask
+
 
 #-------------------------------------------------------------------------------
 # security
@@ -111,46 +123,39 @@ echo 1 > /proc/sys/net/ipv4/tcp_tw_recycle
 echo 1 > /proc/sys/net/ipv4/tcp_window_scaling
 echo 5 > /proc/sys/net/ipv4/tcp_keepalive_probes
 echo 30 > /proc/sys/net/ipv4/tcp_keepalive_intvl
-echo 30 > /proc/sys/net/ipv4/tcp_fin_timeout
+echo 10 > /proc/sys/net/ipv4/tcp_fin_timeout
 echo 0 > /proc/sys/net/ipv4/tcp_timestamps
-
-
-
-
-#-------------------------------------------------------------------------------
-# mem info
-#-------------------------------------------------------------------------------
-echo   
-echo "RAM (/proc/meminfo):"
-cat /proc/meminfo|grep ^MemTotal
-cat /proc/meminfo|grep ^MemFree
-cat /proc/meminfo|grep ^Buffers
-cat /proc/meminfo|grep ^Cached
+echo 2 > /proc/sys/net/ipv4/tcp_syn_retries
+echo 2 > /proc/sys/net/ipv4/tcp_synack_retries
 
 #-------------------------------------------------------------------------------
-# init.d support, executes all /system/etc/init.d/<S>scriptname files
+# init.d support, executes all <S>scriptname files
+# inside /system/etc/init.d or /data/init.d directories
 #-------------------------------------------------------------------------------
 echo;echo "$(date) init.d/userinit.d"
-CONFFILE="midnight_options.conf"
-if $BB [ -f /data/local/$CONFFILE ];then
-    echo "configfile /data/local/midnight_options.conf found, checking values..."
-    if $BB [ "`$BB grep INITD /data/local/$CONFFILE`" ]; then
-        echo $(date) USER INIT START from /system/etc/init.d
-        if cd /system/etc/init.d >/dev/null 2>&1 ; then
-            for file in S* ; do
-                if ! ls "$file" >/dev/null 2>&1 ; then continue ; fi
-                echo "/system/etc/init.d: START '$file'"
-                /system/bin/sh "$file"
-                echo "/system/etc/init.d: EXIT '$file' ($?)"
-            done
-        fi
-        echo $(date) USER INIT DONE from /system/etc/init.d
-    else
-        echo "init.d execution deactivated, nothing to do."
-    fi
-else
-    echo "/data/local/midnight_options.conf not found, no init.d execution, skipping..."
+
+echo $(date) USER INIT START from /system/etc/init.d
+if cd /system/etc/init.d >/dev/null 2>&1 ; then
+    for file in S* ; do
+        if ! ls "$file" >/dev/null 2>&1 ; then continue ; fi
+        echo "/system/etc/init.d: START '$file'"
+        /system/bin/sh "$file"
+        echo "/system/etc/init.d: EXIT '$file' ($?)"
+    done
 fi
+echo $(date) USER INIT DONE from /system/etc/init.d
+
+echo $(date) USER INIT START from /data/init.d
+if cd /data/init.d >/dev/null 2>&1 ; then
+     for file in S* ; do
+         if ! ls "$file" >/dev/null 2>&1 ; then continue ; fi
+         echo "START '$file'"
+         /system/bin/sh "$file"
+         echo "EXIT '$file' ($?)"
+     done
+fi
+echo $(date) USER INIT DONE from /data/init.d
+    
 
 #-------------------------------------------------------------------------------
 # CLEANUP

@@ -1,3 +1,5 @@
+echo "Checking su and Superuser ....."
+
 install_su()
 {
 	/sbin/busybox mount -o remount,rw / /
@@ -25,6 +27,7 @@ install_initd()
 
 clean_all()
 {
+        echo "Clean possible previous Semaphore or Chainfire admin files"
 	/sbin/busybox rm /system/app/Semaphore.apk
 	/sbin/busybox rm /data/dalvik-cache/*semaphore.apk*
 	/sbin/busybox rm -r /data/cfroot
@@ -34,6 +37,7 @@ clean_all()
 }
 
 if /sbin/busybox test -u /system/xbin/su && /sbin/busybox test -f /system/app/Superuser.apk; then
+        echo "Superuser.apk and su binary have been found"
 	/sbin/busybox mount -o remount,rw / /
 	/sbin/busybox mount -o remount,rw /system
 	clean_all
@@ -42,9 +46,11 @@ if /sbin/busybox test -u /system/xbin/su && /sbin/busybox test -f /system/app/Su
 	/sbin/busybox mount -o remount,ro /system
 
 	if /sbin/busybox test /res/misc/su -nt /system/xbin/su; then
-	install_su
+          echo "(su) binary file inside initramfs dmore.kernel is newer than ROM's su;  so i install it"
+	  install_su
 	elif /sbin/busybox test /res/misc/Superuser.apk -nt /system/app/Superuser.apk; then
-	install_su
+          echo "Superuser.apk inside initramfs dmore.kernel is newer than ROM's Superuser.apk;  so i install it"
+	  install_su
 	fi;
 else	install_su
 

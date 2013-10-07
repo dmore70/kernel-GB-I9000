@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.35.7
-# Tue Aug 20 15:04:11 2013
+# Mon Oct  7 15:18:19 2013
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -449,7 +449,7 @@ CONFIG_CMDLINE="console=ttySAC2,115200 init=/linuxrc"
 CONFIG_CPU_FREQ=y
 CONFIG_CPU_FREQ_TABLE=y
 # CONFIG_CPU_FREQ_DEBUG is not set
-CONFIG_CPU_FREQ_STAT=m
+CONFIG_CPU_FREQ_STAT=y
 # CONFIG_CPU_FREQ_STAT_DETAILS is not set
 # CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE is not set
 # CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set

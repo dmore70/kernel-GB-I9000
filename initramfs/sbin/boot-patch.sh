@@ -21,7 +21,7 @@ echo
 echo $(date) USER INIT START from /sbin/boot
 echo
 if cd /sbin/boot >/dev/null 2>&1 ; then
-    for file in * ; do
+    for file in *.sh ; do
         if ! ls "$file" >/dev/null 2>&1 ; then continue ; fi
         echo "START '$file'"
         /sbin/busybox_disabled sh "$file"

@@ -358,10 +358,10 @@ KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
                  -Wno-format-security \
                  -fno-delete-null-pointer-checks \
                  -march=armv7-a -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp \
-                 -ftree-vectorize \
-                 -ffast-math -fsingle-precision-constant \
-                 -fgcse-lm -fgcse-sm -fsched-spec-load -fforce-addr \
-                 --param l2-cache-size=512 --param l1-cache-size=64 --param simultaneous-prefetches=8
+                 -fmodulo-sched -fmodulo-sched-allow-regmoves -fno-tree-vectorize 
+  #               -ffast-math -fsingle-precision-constant \
+  #               -fgcse-lm -fgcse-sm -fsched-spec-load -fforce-addr \
+  #               --param l2-cache-size=512 --param l1-cache-size=64 --param simultaneous-prefetches=8
 
 
 KBUILD_AFLAGS   := -D__ASSEMBLY__

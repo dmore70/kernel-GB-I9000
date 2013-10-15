@@ -357,13 +357,11 @@ KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
                  -Werror-implicit-function-declaration \
                  -Wno-format-security \
                  -fno-delete-null-pointer-checks \
-                 -march=armv7-a -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp \
-                 -fmodulo-sched -fmodulo-sched-allow-regmoves -fno-tree-vectorize 
-  #               -ffast-math -fsingle-precision-constant \
-  #               -fgcse-lm -fgcse-sm -fsched-spec-load -fforce-addr \
-  #               --param l2-cache-size=512 --param l1-cache-size=64 --param simultaneous-prefetches=8
-
-
+                 -march=armv7-a -mtune=cortex-a8 -mfpu=neon \
+                 -ffast-math -fsingle-precision-constant \
+                 -fgcse-lm -fgcse-sm -fsched-spec-load -fforce-addr 
+              
+  
 KBUILD_AFLAGS   := -D__ASSEMBLY__
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
@@ -540,11 +538,14 @@ endif # $(dot-config)
 all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os
+KBUILD_CFLAGS	+= -Os 
 else
-KBUILD_CFLAGS	+= -O3
+KBUILD_CFLAGS += -O3 
 endif
 
+ifdef CONFIG_CC_OPTIMIZE_MORE
+KBUILD_CFLAGS += -O3 -fmodulo-sched -fmodulo-sched-allow-regmoves -fno-tree-vectorize
+endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
 

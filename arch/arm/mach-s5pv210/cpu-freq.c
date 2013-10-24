@@ -347,8 +347,8 @@ static void s5pv210_cpufreq_clksrcs_MPLL2APLL(unsigned int index,
 		/* APLL FOUT becomes 1000 Mhz */
 		if (oc_freq == 1000)
 			__raw_writel(PLL45XX_APLL_VAL_1000, S5P_APLL_CON);
-		else if (oc_freq == 1100)
-			__raw_writel(PLL45XX_APLL_VAL_1100, S5P_APLL_CON);
+		else if (oc_freq == 1128)
+			__raw_writel(PLL45XX_APLL_VAL_1128, S5P_APLL_CON);
 		else if (oc_freq == 1200)
 			__raw_writel(PLL45XX_APLL_VAL_1200, S5P_APLL_CON);
 		else
@@ -984,18 +984,18 @@ void s5pv210_change_high_1100(void)
 {
 	struct cpufreq_policy *policy;
         
-	oc_freq = 1120;
+	oc_freq = 1128;
 
         freq_uv_table[0][0] = oc_freq * 1000;
-        freq_uv_table[0][1] = 1300;
-        freq_uv_table[0][2] = 1300;
+        freq_uv_table[0][1] = 1310;
+        freq_uv_table[0][2] = 1310;
 
         freq_table[L0].frequency = oc_freq * 1000;
 
         clk_info[L0].fclk       = oc_freq * 1000;
         clk_info[L0].armclk      = oc_freq * 1000;
 
-        dvs_conf[L0].arm_volt   = 1300000;
+        dvs_conf[L0].arm_volt   = 1310000;
 
         clkdiv_val[0][1] = 4;
         clkdiv_val[0][2] = 4;
@@ -1005,9 +1005,9 @@ void s5pv210_change_high_1100(void)
 	if (policy == NULL)
 		return;
 
-	policy->max = 1120000;
+	policy->max = 1128000;
 
-	policy->cpuinfo.max_freq = 1120000;
+	policy->cpuinfo.max_freq = 1128000;
 }
 EXPORT_SYMBOL(s5pv210_change_high_1100);
 

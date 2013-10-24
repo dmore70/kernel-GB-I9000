@@ -61,7 +61,7 @@ if $BB [ -f /data/local/$CONFFILE ];then
     if $BB [ "`$BB grep 1 /data/local/$CONFFILE`" ]; then
         echo "max1100 found, setting..."
         echo 1 > /sys/devices/virtual/misc/semaphore_cpufreq/oc
-        echo 1120000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+        echo 1128000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
      elif $BB [ "`$BB grep 2 /data/local/$CONFFILE`" ]; then
         echo "max1200 found, setting..."

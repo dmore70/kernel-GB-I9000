@@ -57,23 +57,23 @@ $BB mount|grep /cache
 #-------------------------------------------------------------------------------
 CONFFILE="dmore-cpufreq.conf"
 echo; echo "$(date) $CONFFILE"
-if $BB [ -f /data/local/$CONFFILE ];then
-    if $BB [ "`$BB grep 1 /data/local/$CONFFILE`" ]; then
+if $BB [ -f /system/$CONFFILE ];then
+    if $BB [ "`$BB grep 1 /system/$CONFFILE`" ]; then
         echo "max1100 found, setting..."
         echo 1 > /sys/devices/virtual/misc/semaphore_cpufreq/oc
         echo 1128000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
-     elif $BB [ "`$BB grep 2 /data/local/$CONFFILE`" ]; then
+     elif $BB [ "`$BB grep 2 /system/$CONFFILE`" ]; then
         echo "max1200 found, setting..."
         echo 2 > /sys/devices/virtual/misc/semaphore_cpufreq/oc
         echo 1200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
-    elif $BB [ "`$BB grep 3 /data/local/$CONFFILE`" ]; then
+    elif $BB [ "`$BB grep 3 /system/$CONFFILE`" ]; then
         echo "max1300 found, setting..."
         echo 3 > /sys/devices/virtual/misc/semaphore_cpufreq/oc
         echo 1300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
-    elif $BB [ "`$BB grep 800 /data/local/$CONFFILE`" ]; then
+    elif $BB [ "`$BB grep 800 /system/$CONFFILE`" ]; then
         echo "max800 found, setting..."
         echo 800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
@@ -82,7 +82,7 @@ if $BB [ -f /data/local/$CONFFILE ];then
         echo 1000000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     fi
 else
-    echo "/data/local/$CONFFILE not found, skipping..."
+    echo "/system/$CONFFILE not found, no overclock, skipping..."
 fi
 
 # load cpufreq_stats module after oc has been en-/disabled

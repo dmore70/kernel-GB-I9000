@@ -1,6 +1,21 @@
 # Script to build for the captivate and zip the package.
 # Written by Evan alias ytt3r
-# modified by Dmore
+# modified by DMORE
+#
+# HOW COMPILE DMORE KERNEL
+#
+# Cleaning is done on three levels.
+# make clean     Delete most generated files
+#                Leave enough to build external modules
+# make mrproper  Delete the current configuration, and all generated files
+# make distclean Remove editor backup files, patch leftover files and the like
+
+# make dmore_defconfig   (copy dmore_defconfig file on .config kernel configuration file)
+# make menuconfig        (if you want midify kernel features)
+# ./build.sh             (compile dmore kernel)
+
+# compilated Dmore kernel has saved on /releastools directory
+
 
 
 export LOCALVERSION="-1186377" # release JW9

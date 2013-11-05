@@ -25,8 +25,8 @@ export KBUILD_BUILD_VERSION="rev03"
 #export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/android_prebuilt_toolchains/arm-eabi-linaro-4.6.2/bin/arm-eabi-"
 #export CROSS_COMPILE="/home/dmore/android-ndk-r8c/toolchains/arm-linux-androideabi-4.6/prebuilt/linux-x86/bin/arm-linux-androideabi-"
 #export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/android-toolchain-eabi-linaro-4.7.4/bin/arm-eabi-"
-export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/arm-cortex_a8-linux-gnueabi-linaro_4.7.4-2013.09/bin/arm-gnueabi-"
-
+#export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/arm-cortex_a8-linux-gnueabi-linaro_4.7.4-2013.09/bin/arm-gnueabi-"
+export CROSS_COMPILE="/home/dmore/android-kernel/arm-compiler/arm-cortex_a8-linux-gnueabi-linaro_4.7.4-2013.10/bin/arm-cortex_a8-linux-gnueabi-"
 if ! [ -e .config ]; then
  make $1
 fi

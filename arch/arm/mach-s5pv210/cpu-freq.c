@@ -58,7 +58,7 @@ static DEFINE_MUTEX(set_freq_lock);
 
 /* frequency */
 static struct cpufreq_frequency_table freq_table[] = {
-	{L0, 1300*1300},
+	{L0, 1300*1000},
 	{L1, 1000*1000},
 	{L2, 800*1000},
 	{L3, 400*1000},

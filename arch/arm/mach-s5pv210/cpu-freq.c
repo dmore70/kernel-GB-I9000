@@ -70,9 +70,9 @@ static struct cpufreq_frequency_table freq_table[] = {
 extern int exp_UV_mV[6];
 unsigned int freq_uv_table[6][3] = {
 	//frequency, stock voltage, current voltage
-	{1300000, 1275, 1275},
 	{1000000, 1275, 1275},
-	{800000, 1200, 1250},
+	{1000000, 1275, 1275},
+	{800000, 1200, 1200},
 	{400000, 1050, 1050},
 	{200000, 950, 950},
 	{100000, 950, 950}
@@ -86,7 +86,7 @@ struct s5pv210_dvs_conf {
 
 #ifdef CONFIG_DVFS_LIMIT
 static unsigned int g_dvfs_high_lock_token = 0;
-static unsigned int g_dvfs_high_lock_limit = 5;
+static unsigned int g_dvfs_high_lock_limit = 6;
 static unsigned int g_dvfslockval[DVFS_LOCK_TOKEN_NUM];
 //static DEFINE_MUTEX(dvfs_high_lock);
 #endif
@@ -96,7 +96,7 @@ const unsigned long int_volt_max = 1250000;
 
 static struct s5pv210_dvs_conf dvs_conf[] = {
 	[L0] = {
-		.arm_volt	= 1300000,
+		.arm_volt   = 1275000,
 		.int_volt   = 1100000,
 	},
 	[L1] = {
@@ -142,8 +142,8 @@ static u32 clkdiv_val[6][11] = {
 
 static struct s3c_freq clk_info[] = {
 	[L0] = {	/* L0: 1.3GHz */
-			.fclk       = 1300000,
-			.armclk     = 1300000,
+			.fclk       = 1000000,
+			.armclk     = 1000000,
 			.hclk_tns   = 0,
 			.hclk       = 133000,
 			.pclk       = 66000,
@@ -760,35 +760,7 @@ static int s5pv210_cpufreq_suspend(struct cpufreq_policy *policy,
 
 static int s5pv210_cpufreq_resume(struct cpufreq_policy *policy)
 {
-	int ret = 0;
-	u32 rate;
-	int level = CPUFREQ_TABLE_END;
-	int i = 0;
-
-	/* Clock information update with wakeup value */
-	rate = clk_get_rate(mpu_clk);
-
-	while (freq_table[i].frequency != CPUFREQ_TABLE_END) {
-		if (freq_table[i].frequency * 1000 == rate) {
-			level = freq_table[i].index;
-			break;
-		}
-		i++;
-	}
-
-	if (level == CPUFREQ_TABLE_END) { /* Not found */
-		pr_err("[%s:%d] clock speed does not match: "
-				"%d. Using L2 of 800MHz.\n",
-				__FILE__, __LINE__, rate);
-		level = L2;
-	}
-
-	memcpy(&s3c_freqs.old, &clk_info[level],
-			sizeof(struct s3c_freq));
-	previous_arm_volt = (dvs_conf[level].arm_volt - (exp_UV_mV[level]*1000));
-	//freq_uv_table[level][2] = (int) previous_arm_volt / 1000;
-
-	return ret;
+	return 0;
 }
 #endif
 
